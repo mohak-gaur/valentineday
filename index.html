@@ -105,9 +105,8 @@ button {
 #noBtn {
     background: #ced4da;
     color: #333;
-    position: fixed;
+    position: absolute; /* 🔥 fixed → absolute */
     border-radius: 30px;
-    pointer-events: auto;
     animation: floatCrazy 1.8s ease-in-out infinite;
     transition:
         left 0.25s ease-out,
@@ -157,7 +156,7 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 
 // ---------- NO BUTTON LOGIC ----------
-teleportNo();
+//teleportNo();
 
 function teleportNo() {
     const padding = 40;
@@ -212,4 +211,5 @@ function yesClicked() {
 </script>
 
 </body>
+
 </html>
