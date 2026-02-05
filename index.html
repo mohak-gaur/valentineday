@@ -46,14 +46,8 @@ body {
 .heart::after { left: -7px; top: 0; }
 
 @keyframes floatUp {
-    from {
-        transform: translateY(100vh) rotate(45deg);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(-10vh) rotate(45deg);
-        opacity: 1;
-    }
+    from { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+    to   { transform: translateY(-10vh) rotate(45deg); opacity: 1; }
 }
 
 .container {
@@ -63,12 +57,6 @@ body {
     text-align: center;
     box-shadow: 0 20px 45px rgba(0,0,0,0.25);
     z-index: 10;
-    animation: fadeIn 1s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
 }
 
 h1 {
@@ -80,6 +68,9 @@ h1 {
 .buttons {
     position: relative;
     height: 90px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
 }
 
 button {
@@ -94,7 +85,6 @@ button {
 #yesBtn {
     background: #e63946;
     color: white;
-    margin-right: 20px;
 }
 
 #yesBtn:hover {
@@ -102,24 +92,18 @@ button {
     background: #d62828;
 }
 
+/* NO button – normal at start */
 #noBtn {
     background: #ced4da;
     color: #333;
-    position: absolute; /* 🔥 fixed → absolute */
-    border-radius: 30px;
     animation: floatCrazy 1.8s ease-in-out infinite;
-    transition:
-        left 0.25s ease-out,
-        top 0.25s ease-out,
-        transform 0.25s ease-out;
 }
 
 @keyframes floatCrazy {
-    0%   { transform: translateY(0) rotate(0deg); }
-    50%  { transform: translateY(-10px) rotate(2deg); }
-    100% { transform: translateY(0) rotate(-2deg); }
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
 }
-
 </style>
 </head>
 
@@ -135,7 +119,6 @@ for (let i = 0; i < 40; i++) {
     heart.className = "heart";
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.animationDuration = (Math.random() * 4 + 3) + "s";
-    heart.style.width = heart.style.height = (Math.random() * 10 + 10) + "px";
     document.body.appendChild(heart);
 }
 </script>
@@ -148,19 +131,17 @@ for (let i = 0; i < 40; i++) {
     </div>
 </div>
 
-<!-- CONFETTI LIBRARY -->
+<!-- CONFETTI -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
 const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
 
-// ---------- NO BUTTON LOGIC ----------
-//teleportNo();
-
+// 🔥 Escape logic (activated ONLY on hover)
 function teleportNo() {
-    const padding = 40;
+    noBtn.style.position = "fixed";
 
+    const padding = 40;
     const maxX = window.innerWidth - noBtn.offsetWidth - padding;
     const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
@@ -171,35 +152,27 @@ function teleportNo() {
     noBtn.style.top = y + "px";
 }
 
-// Proximity detection ONLY for No button
+// Hover = run
 noBtn.addEventListener("mouseenter", teleportNo);
 noBtn.addEventListener("mousemove", teleportNo);
-
-// Extra evil for mobile
 noBtn.addEventListener("touchstart", teleportNo);
 
-// Disable click completely
-noBtn.addEventListener("click", (e) => {
+// Disable click
+noBtn.addEventListener("click", e => {
     e.preventDefault();
     e.stopPropagation();
 });
 
-// ---------- YES BUTTON LOGIC ----------
+// YES logic
 function yesClicked() {
-    // 🎵 Play music
-    const music = document.getElementById("bgMusic");
-    if (music) music.play();
+    document.getElementById("bgMusic").play();
 
-    // 🎆 Confetti
-    if (window.confetti) {
-        confetti({
-            particleCount: 220,
-            spread: 120,
-            origin: { y: 0.6 }
-        });
-    }
+    confetti({
+        particleCount: 220,
+        spread: 120,
+        origin: { y: 0.6 }
+    });
 
-    // 💖 Success message
     document.getElementById("box").innerHTML = `
         <h1>Yaaaay! 💕🥰</h1>
         <p style="font-size:18px;color:#555;">
@@ -211,5 +184,4 @@ function yesClicked() {
 </script>
 
 </body>
-
 </html>
