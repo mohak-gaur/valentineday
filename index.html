@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Proposal 💖</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    height: 100vh;
+    background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Floating Hearts */
+.heart {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: pink;
+    transform: rotate(45deg);
+    animation: floatUp linear infinite;
+    opacity: 0.8;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: pink;
+    border-radius: 50%;
+}
+
+.heart::before { top: -7px; left: 0; }
+.heart::after { left: -7px; top: 0; }
+
+@keyframes floatUp {
+    from {
+        transform: translateY(100vh) rotate(45deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(-10vh) rotate(45deg);
+        opacity: 1;
+    }
+}
+
+.container {
+    background: white;
+    padding: 45px 65px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+    z-index: 10;
+    animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+h1 {
+    color: #e63946;
+    margin-bottom: 35px;
+    font-size: 30px;
+}
+
+.buttons {
+    position: relative;
+    height: 90px;
+}
+
+button {
+    padding: 14px 32px;
+    font-size: 17px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+#yesBtn {
+    background: #e63946;
+    color: white;
+    margin-right: 20px;
+}
+
+#yesBtn:hover {
+    transform: scale(1.1);
+    background: #d62828;
+}
+
+#noBtn {
+    background: #ced4da;
+    color: #333;
+    position: fixed;
+    border-radius: 30px;
+    pointer-events: auto;
+    animation: floatCrazy 1.8s ease-in-out infinite;
+    transition:
+        left 0.25s ease-out,
+        top 0.25s ease-out,
+        transform 0.25s ease-out;
+}
+
+@keyframes floatCrazy {
+    0%   { transform: translateY(0) rotate(0deg); }
+    50%  { transform: translateY(-10px) rotate(2deg); }
+    100% { transform: translateY(0) rotate(-2deg); }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio id="bgMusic" src="dooron-dooron.mp3"></audio>
+
+<!-- HEARTS -->
+<script>
+for (let i = 0; i < 40; i++) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 4 + 3) + "s";
+    heart.style.width = heart.style.height = (Math.random() * 10 + 10) + "px";
+    document.body.appendChild(heart);
+}
+</script>
+
+<div class="container" id="box">
+    <h1>Taruu! 💖<br>Will you be my Valentine?</h1>
+    <div class="buttons">
+        <button id="yesBtn" onclick="yesClicked()">Yes 😍</button>
+        <button id="noBtn">No 🙈</button>
+    </div>
+</div>
+
+<!-- CONFETTI LIBRARY -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+
+// ---------- NO BUTTON LOGIC ----------
+teleportNo();
+
+function teleportNo() {
+    const padding = 40;
+
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+// Proximity detection ONLY for No button
+noBtn.addEventListener("mouseenter", teleportNo);
+noBtn.addEventListener("mousemove", teleportNo);
+
+// Extra evil for mobile
+noBtn.addEventListener("touchstart", teleportNo);
+
+// Disable click completely
+noBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+});
+
+// ---------- YES BUTTON LOGIC ----------
+function yesClicked() {
+    // 🎵 Play music
+    const music = document.getElementById("bgMusic");
+    if (music) music.play();
+
+    // 🎆 Confetti
+    if (window.confetti) {
+        confetti({
+            particleCount: 220,
+            spread: 120,
+            origin: { y: 0.6 }
+        });
+    }
+
+    // 💖 Success message
+    document.getElementById("box").innerHTML = `
+        <h1>Yaaaay! 💕🥰</h1>
+        <p style="font-size:18px;color:#555;">
+            Happy Valentine’s Day ❤️<br>
+            Dooron Dooron 🎵 but hearts connected forever 💫
+        </p>
+    `;
+}
+</script>
+
+</body>
+</html>
